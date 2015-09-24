@@ -3,12 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsmEditor", "AsmEditor\AsmEditor.csproj", "{DD7B04B1-4917-4F32-9055-9EA64EA6DE84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCAsmCompiler", "MCAsmCompiler\MCAsmCompiler.csproj", "{4BF416AA-B8DB-4647-87E7-17E1476AF666}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BF416AA-B8DB-4647-87E7-17E1476AF666}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4BF416AA-B8DB-4647-87E7-17E1476AF666}.Debug|x86.Build.0 = Debug|Any CPU
+		{4BF416AA-B8DB-4647-87E7-17E1476AF666}.Release|x86.ActiveCfg = Release|Any CPU
+		{4BF416AA-B8DB-4647-87E7-17E1476AF666}.Release|x86.Build.0 = Release|Any CPU
 		{DD7B04B1-4917-4F32-9055-9EA64EA6DE84}.Debug|x86.ActiveCfg = Debug|x86
 		{DD7B04B1-4917-4F32-9055-9EA64EA6DE84}.Debug|x86.Build.0 = Debug|x86
 		{DD7B04B1-4917-4F32-9055-9EA64EA6DE84}.Release|x86.ActiveCfg = Release|x86

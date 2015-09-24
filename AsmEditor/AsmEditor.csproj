@@ -49,12 +49,12 @@
     <Reference Include="atk-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <Reference Include="Mono.TextEditor">
-      <HintPath>C:\Program Files %28x86%29\Xamarin Studio\bin\Mono.TextEditor.dll</HintPath>
+    <Reference Include="Mono.Posix" />
+    <Reference Include="ICSharpCode.NRefactory, Version=5.0.0.0, Culture=neutral, PublicKeyToken=d4bfe873e7598c49">
+      <Package>monodevelop</Package>
     </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>C:\Program Files %28x86%29\Xamarin Studio\bin\ICSharpCode.NRefactory.dll</HintPath>
+    <Reference Include="Mono.TextEditor">
+      <HintPath>..\..\..\..\..\usr\lib\monodevelop\bin\Mono.TextEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -71,4 +71,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\MCAsmCompiler\MCAsmCompiler.csproj">
+      <Project>{4BF416AA-B8DB-4647-87E7-17E1476AF666}</Project>
+      <Name>MCAsmCompiler</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

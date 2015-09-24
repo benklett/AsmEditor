@@ -1,0 +1,81 @@
+Register:
+A   B   C   D  [E]        SP  BP
+
+Flags:
+ZF  -   Zero
+CF  -   Carry
+SF  -   Sign
+OF  -   Overflow
+PF  -   Parity (Even)
+
+Number      Hex     AUX in bit  OP          Type                Usage                                   Cycles
+------------------------------------------------------------------------------------------------------------------
+0           00                  NOP                             no Operation                            1
+
+//ALU                                                                                                   2
+1           01      00BB BAAA   ADD         A=Reg B=Reg         A += B
+2           02      00BB BAAA   SUB         A=Reg B=Reg         A -= B
+
+3           03      00BB BAAA   AND         A=Reg B=Reg         A &= B
+4           04      00BB BAAA   OR          A=Reg B=Reg         A |= B
+5           05      00BB BAAA   XOR         A=Reg B=Reg         A ^= B
+6           06      0000 0AAA   NOT         A=Reg               A ~= A
+7           07      0000 0AAA   NEG         A=Reg               A = -A
+
+8           08      0CBB BAAA   MUL         A=Reg B=Reg C=Bool  A *= B; Signed = C
+9           09      00BB BAAA   DIV         A=Reg B=Reg         A /= B
+
+10          0A      00BB BAAA   LSH         A=Reg B=Reg         A <<= B
+11          0B      0CBB BAAA   RSH         A=Reg B=Reg C=Bool  !C: A >>= B
+                                                                 C: A >>>= B
+12          0C      0000 0AAA   INC         A=Reg               A++
+13          0D      0000 0AAA   DEC         A=Reg               A--
+
+14          0E      00BB BAAA   ADC         A=Reg               A += B  with Carry
+15          0F      00BB BAAA   SBB         A=Reg               A -= B  with Borrow
+
+16          10      00BB BAAA   CMP         A=Reg B=Reg         Compare A B and set Flags
+
+//Memory                                                                                                2
+20          14      00BB BAAA   MOV         A=Reg B=Reg         A = B
+
+21          15      CCCC CAAA   LDC         A=Reg C=Constant    A = C
+
+22          16      BBBB BAAA   LDRS        A=Reg B=short Addr  A <- B
+23          17      00BB BAAA   LDR         A=Reg B=long Addr   A <- [B]            
+
+24          18      BBBB BAAA   STRS        A=Reg B=short Addr  A -> B
+25          19      00BB BAAA   STR         A=Reg B=long Addr   A -> [B]            
+
+26          1A      0000 0AAA   PUSH        A=Reg               push A on Stack
+27          1B                  PUSHA                           push ALL Regs on Stack                  1
+28          1C      AAAA AAAA   PUSHC       A=Constant          push A on Stack
+
+29          1D      0000 0AAA   POP         A=Reg               pop Stack into A
+30          1E                  POPA                            pop ALL Regs                            1
+
+//Jumps
+32          20      AAAA AAAA   JMP         A=Addr              Jump to A
+
+33          21      AAAA AAAA   JE / JZ     A=Addr              Jump to A if ZF = 1
+34          22      AAAA AAAA   JA / JNBE   A=Addr              Jump to A if ZF = 0 && CF = 0
+35          23      AAAA AAAA   JAE/JNB/JNC A=Addr              Jump to A if CF = 0
+36          24      AAAA AAAA   JB/JNAE/JC  A=Addr              Jump to A if CF = 1
+37          25      AAAA AAAA   JBE / JNA   A=Addr              Jump to A if CF = 1 || ZF = 1
+38          26      AAAA AAAA   JG / JNLE   A=Addr              Jump to A if ZF = 0 || SF == OF
+39          27      AAAA AAAA   JGE / JNL   A=Addr              Jump to A if SF == OF
+40          28      AAAA AAAA   JL / JNGE   A=Addr              Jump to A if SF != OF
+41          29      AAAA AAAA   JLE / JNG   A=Addr              Jump to A if SF != OF || ZF = 1
+42          2A      AAAA AAAA   JNE / JNZ   A=Addr              Jump to A if ZF = 0
+43          2B      AAAA AAAA   JNS         A=Addr              Jump to A if SF = 0
+44          2C      AAAA AAAA   JO          A=Addr              Jump to A if OF = 1
+45          2D      AAAA AAAA   JS          A=Addr              Jump to A if SF = 1
+46          2E      AAAA AAAA   JNP / JPO   A=Addr              Jump to A if PF = 0
+47          2F      AAAA AAAA   JP / JPE    A=Addr              Jump to A if PF = 1
+
+//Functions
+48          30      AAAA AAAA   CALL        A=Addr              pushes ALL Regs onto Stack and jumps to A           2
+49          31                  RET                             pops ALL Regs and returns to the previous function  1
+
+//Other
+255         FF                  HLT                             halts the CPU                           1
