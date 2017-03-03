@@ -2,6 +2,8 @@
 using System.IO;
 using Gtk;
 using Mono.TextEditor;
+using Mono.TextEditor.Highlighting;
+using System.Reflection;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -15,8 +17,14 @@ public partial class MainWindow: Gtk.Window
     {
         Build();
 
+        SyntaxModeService.LoadStylesAndModes(Assembly.GetExecutingAssembly());
+
         editor = new TextEditor();
-        editor.Document.LineChanged += (sender, e) => isEdited = true;;
+        editor.Document.LineChanged += (sender, e) => isEdited = true;
+        editor.HighlightSearchPattern = true;
+        editor.Document.MimeType = "text/x-mcasm";
+        editor.Options = new TextEditorOptions(){ EnableSyntaxHighlighting = true, ColorScheme = "Oblivion", HighlightCaretLine = true };
+
         vbox1.Add(editor);
         vbox1.ReorderChild(editor, 1);
 
@@ -40,12 +48,60 @@ public partial class MainWindow: Gtk.Window
     #region Events
     protected void compileAction_Activated(object sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        string errorLog = "";
+        byte[] bytecode = MCAsmCompiler.MCAsmCompiler.Compile(editor.Document.Text, out errorLog);
+
+        if (errorLog.Length != 0)
+        {
+            var md = new MessageDialog(this, DialogFlags.DestroyWithParent, MessageType.Error, ButtonsType.Ok, errorLog);
+            md.Run();
+            md.Destroy();
+            return;
+        }
+
+        if (filename == null)
+            return;
+        
+        File.WriteAllBytes(filename + ".out", bytecode);
     }
 
     protected void compileSaveAsAction_Activated(object sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        string errorLog = "";
+        byte[] bytecode = MCAsmCompiler.MCAsmCompiler.Compile(editor.Document.Text, out errorLog);
+
+        if (errorLog.Length != 0)
+        {
+            var md = new MessageDialog(this, DialogFlags.DestroyWithParent, MessageType.Error, ButtonsType.Ok, errorLog);
+            md.Run();
+            md.Destroy();
+            return;
+        }
+
+        if (filename == null)
+            return;
+
+        FileChooserDialog fcd = new FileChooserDialog(
+            "Save File",
+            this,
+            FileChooserAction.Save,
+            "Cancel", ResponseType.Cancel,
+            "Save", ResponseType.Accept);
+        fcd.Modal = true;
+        fcd.DestroyWithParent = true;
+
+        ResponseType resp = (ResponseType)fcd.Run();
+
+        if (resp == ResponseType.Cancel)
+        {
+            fcd.Destroy();
+            return;
+        }
+
+        filename = fcd.Filename;
+        fcd.Destroy();
+
+        File.WriteAllBytes(filename, bytecode);
     }
 
     protected void newAction_Activated(object sender, EventArgs e)
